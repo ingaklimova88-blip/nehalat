@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Редактор сайта — НеХалат</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }, colors: { brand: { 600: '#1652a0', 700: '#1a4a8a' } } } }
+    }
+  </script>
+</head>
+<body class="font-sans bg-gray-50 text-gray-900">
+
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <h1 class="text-lg font-semibold text-brand-600">Редактор сайта НеХалат</h1>
+      <div class="flex gap-2">
+        <button onclick="previewSite()" class="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">Предпросмотр</button>
+        <button onclick="downloadContent()" class="px-4 py-2 text-sm bg-brand-600 text-white rounded-lg hover:bg-brand-700">Скачать content.js</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Общие настройки -->
+    <section class="bg-white rounded-xl p-6 shadow-sm">
+      <h2 class="text-base font-semibold mb-4">Общие настройки</h2>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm text-gray-500 mb-1">Логотип (путь к файлу)</label>
+          <input type="text" id="f-logo" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1">Подзаголовок на главном экране</label>
+          <input type="text" id="f-hero-subtitle" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1">Текст кнопки</label>
+          <input type="text" id="f-hero-btn" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Товары -->
+    <section class="bg-white rounded-xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-base font-semibold">Товары</h2>
+        <button onclick="addProduct()" class="px-3 py-1.5 text-sm bg-brand-600 text-white rounded-lg hover:bg-brand-700">+ Добавить товар</button>
+      </div>
+      <div id="products-list" class="space-y-4"></div>
+    </section>
+
+    <!-- О бренде -->
+    <section class="bg-white rounded-xl p-6 shadow-sm">
+      <h2 class="text-base font-semibold mb-4">О бренде</h2>
+      <div>
+        <label class="block text-sm text-gray-500 mb-1">Заголовок раздела</label>
+        <input type="text" id="f-about-title" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-4" />
+      </div>
+      <div id="features-list" class="space-y-4"></div>
+    </section>
+
+    <!-- Футер -->
+    <section class="bg-white rounded-xl p-6 shadow-sm">
+      <h2 class="text-base font-semibold mb-4">Футер и контакты</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-gray-500 mb-1">Описание в футере</label>
+          <input type="text" id="f-footer-text" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1">E-mail</label>
+          <input type="text" id="f-email" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1">Ссылка на Instagram</label>
+          <input type="text" id="f-instagram" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1">Ссылка на WhatsApp</label>
+          <input type="text" id="f-whatsapp" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500 mb-1">Копирайт</label>
+          <input type="text" id="f-copyright" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Инструкция -->
+    <section class="bg-blue-50 rounded-xl p-6 text-sm text-blue-800 leading-relaxed">
+      <h2 class="font-semibold mb-2">Как обновить сайт</h2>
+      <ol class="list-decimal pl-5 space-y-1">
+        <li>Отредактируй тексты выше</li>
+        <li>Нажми <strong>«Скачать content.js»</strong></li>
+        <li>Зайди в <strong>файловый менеджер</strong> хостинга (ISPmanager → Менеджер файлов)</li>
+        <li>Открой папку <strong>/www/xn--80aanzh8ar.xn--p1ai/</strong></li>
+        <li>Загрузи туда скачанный файл <strong>content.js</strong> (с заменой)</li>
+        <li>Готово! Изменения сразу появятся на сайте</li>
+      </ol>
+      <p class="mt-3"><strong>Чтобы добавить фото товара:</strong> загрузи картинку в папку <strong>images/</strong> на хостинге и укажи путь в поле «Картинка», например: <code>images/my-photo.jpg</code></p>
+    </section>
+
+  </main>
+
+  <script src="content.js"></script>
+  <script>
+    const C = SITE_CONTENT;
+
+    // Заполняем поля
+    document.getElementById('f-logo').value = C.logo;
+    document.getElementById('f-hero-subtitle').value = C.hero.subtitle;
+    document.getElementById('f-hero-btn').value = C.hero.buttonText;
+    document.getElementById('f-about-title').value = C.aboutTitle;
+    document.getElementById('f-footer-text').value = C.footerText;
+    document.getElementById('f-email').value = C.contactEmail;
+    document.getElementById('f-instagram').value = C.instagramUrl;
+    document.getElementById('f-whatsapp').value = C.whatsappUrl;
+    document.getElementById('f-copyright').value = C.copyright;
+
+    // Товары
+    function renderProductEditor(products) {
+      document.getElementById('products-list').innerHTML = products.map((p, i) => `
+        <div class="border border-gray-200 rounded-lg p-4" data-idx="${i}">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-sm font-medium text-gray-700">#${i + 1}</span>
+            <button onclick="removeProduct(${i})" class="text-xs text-red-500 hover:text-red-700">Удалить</button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Название</label>
+              <input type="text" value="${p.name}" onchange="C.products[${i}].name=this.value" class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Тип</label>
+              <select onchange="C.products[${i}].type=this.value" class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm">
+                <option value="tshirt" ${p.type === 'tshirt' ? 'selected' : ''}>Футболка</option>
+                <option value="hoodie" ${p.type === 'hoodie' ? 'selected' : ''}>Худи</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Цена (₽)</label>
+              <input type="number" value="${p.price}" onchange="C.products[${i}].price=+this.value" class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Старая цена (пусто = нет)</label>
+              <input type="number" value="${p.oldPrice || ''}" onchange="C.products[${i}].oldPrice=this.value?+this.value:null" class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Бейдж (NEW, SALE, ХИТ или пусто)</label>
+              <input type="text" value="${p.badge || ''}" onchange="C.products[${i}].badge=this.value||null" class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Картинка (путь или пусто)</label>
+              <input type="text" value="${p.image || ''}" onchange="C.products[${i}].image=this.value||null" class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm" />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-xs text-gray-400 mb-1">Цвета (через запятую, hex: #ffffff, #1a1a1a)</label>
+              <input type="text" value="${p.colors.join(', ')}" onchange="C.products[${i}].colors=this.value.split(',').map(s=>s.trim())" class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm" />
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    renderProductEditor(C.products);
+
+    function addProduct() {
+      C.products.push({ name: 'Новый товар', price: 2900, oldPrice: null, type: 'tshirt', colors: ['#ffffff', '#1a1a1a'], badge: null, image: null });
+      renderProductEditor(C.products);
+    }
+
+    function removeProduct(idx) {
+      if (confirm('Удалить этот товар?')) {
+        C.products.splice(idx, 1);
+        renderProductEditor(C.products);
+      }
+    }
+
+    // Фичи «О бренде»
+    function renderFeaturesEditor() {
+      document.getElementById('features-list').innerHTML = C.features.map((f, i) => `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 border border-gray-200 rounded-lg p-3">
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Заголовок</label>
+            <input type="text" value="${f.title}" onchange="C.features[${i}].title=this.value" class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Описание</label>
+            <input type="text" value="${f.text}" onchange="C.features[${i}].text=this.value" class="w-full border border-gray-200 rounded px-2 py-1.5 text-sm" />
+          </div>
+        </div>
+      `).join('');
+    }
+    renderFeaturesEditor();
+
+    // Собираем данные и генерируем content.js
+    function gatherData() {
+      C.logo = document.getElementById('f-logo').value;
+      C.hero.subtitle = document.getElementById('f-hero-subtitle').value;
+      C.hero.buttonText = document.getElementById('f-hero-btn').value;
+      C.aboutTitle = document.getElementById('f-about-title').value;
+      C.footerText = document.getElementById('f-footer-text').value;
+      C.contactEmail = document.getElementById('f-email').value;
+      C.instagramUrl = document.getElementById('f-instagram').value;
+      C.whatsappUrl = document.getElementById('f-whatsapp').value;
+      C.copyright = document.getElementById('f-copyright').value;
+    }
+
+    function generateContentJS() {
+      gatherData();
+      const productsStr = C.products.map(p => {
+        return `    {\n` +
+          `      name: '${p.name.replace(/'/g, "\\'")}',\n` +
+          `      price: ${p.price},\n` +
+          `      oldPrice: ${p.oldPrice === null ? 'null' : p.oldPrice},\n` +
+          `      type: '${p.type}',\n` +
+          `      colors: [${p.colors.map(c => `'${c}'`).join(', ')}],\n` +
+          `      badge: ${p.badge === null ? 'null' : `'${p.badge}'`},\n` +
+          `      image: ${p.image === null ? 'null' : `'${p.image}'`},\n` +
+          `    }`;
+      }).join(',\n');
+
+      const featuresStr = C.features.map(f => {
+        return `    { title: '${f.title.replace(/'/g, "\\'")}', text: '${f.text.replace(/'/g, "\\'")}' }`;
+      }).join(',\n');
+
+      return `const SITE_CONTENT = {\n` +
+        `  logo: '${C.logo}',\n\n` +
+        `  hero: {\n` +
+        `    subtitle: '${C.hero.subtitle.replace(/'/g, "\\'")}',\n` +
+        `    buttonText: '${C.hero.buttonText.replace(/'/g, "\\'")}',\n` +
+        `  },\n\n` +
+        `  catalogTitle: '${C.catalogTitle}',\n` +
+        `  filterAll: '${C.filterAll}',\n` +
+        `  filterTshirts: '${C.filterTshirts}',\n` +
+        `  filterHoodies: '${C.filterHoodies}',\n\n` +
+        `  products: [\n${productsStr}\n  ],\n\n` +
+        `  aboutTitle: '${C.aboutTitle.replace(/'/g, "\\'")}',\n` +
+        `  features: [\n${featuresStr}\n  ],\n\n` +
+        `  footerText: '${C.footerText.replace(/'/g, "\\'")}',\n` +
+        `  contactEmail: '${C.contactEmail}',\n` +
+        `  instagramUrl: '${C.instagramUrl}',\n` +
+        `  whatsappUrl: '${C.whatsappUrl}',\n` +
+        `  copyright: '${C.copyright.replace(/'/g, "\\'")}',\n` +
+        `};\n`;
+    }
+
+    function downloadContent() {
+      const text = generateContentJS();
+      const blob = new Blob([text], { type: 'text/javascript' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'content.js';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      alert('Файл content.js скачан! Загрузи его на хостинг в папку сайта (замени старый).');
+    }
+
+    function previewSite() {
+      window.open('index.html', '_blank');
+    }
+  </script>
+
+</body>
+</html>

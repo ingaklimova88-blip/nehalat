@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>НеХалат — Одежда с принтами для врачей</title>
+  <meta name="description" content="НеХалат — стильная одежда с медицинскими и ветеринарными принтами. Футболки и худи для тех, кто гордится профессией." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            logo: ['Caveat', 'cursive'],
+          },
+          colors: {
+            brand: {
+              50: '#eff5ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93bbfd',
+              400: '#6096f8',
+              500: '#3b6ef3',
+              600: '#1652a0',
+              700: '#1a4a8a',
+              800: '#1b3d70',
+              900: '#1c355e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .logo-text { font-family: 'Caveat', cursive; }
+  </style>
+</head>
+<body class="font-sans text-gray-900 bg-white">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="#"><img id="header-logo" alt="НеХалат" class="h-9" /></a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="#catalog" class="text-sm text-gray-500 hover:text-brand-600 transition-colors">Каталог</a>
+          <a href="#about" class="text-sm text-gray-500 hover:text-brand-600 transition-colors">О бренде</a>
+          <a href="#contacts" class="text-sm text-gray-500 hover:text-brand-600 transition-colors">Контакты</a>
+        </nav>
+        <button class="md:hidden p-2 text-gray-500" onclick="document.getElementById('mobile-nav').classList.toggle('hidden')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+      <nav id="mobile-nav" class="hidden md:hidden pb-4 flex flex-col gap-3 border-t border-gray-100 pt-3">
+        <a href="#catalog" class="text-sm text-gray-500 hover:text-brand-600">Каталог</a>
+        <a href="#about" class="text-sm text-gray-500 hover:text-brand-600">О бренде</a>
+        <a href="#contacts" class="text-sm text-gray-500 hover:text-brand-600">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="bg-[#f5f7fa]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 md:py-28 text-center">
+      <img id="hero-logo" alt="НеХалат" class="h-20 md:h-28 mx-auto" />
+      <p id="hero-subtitle" class="mt-6 text-lg md:text-xl text-gray-400 max-w-xl mx-auto font-light"></p>
+      <a href="#catalog" id="hero-btn" class="inline-block mt-8 px-8 py-3 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 transition-colors"></a>
+    </div>
+  </section>
+
+  <!-- Catalog -->
+  <section id="catalog" class="max-w-6xl mx-auto px-4 sm:px-6 py-14 md:py-20">
+    <div class="flex items-center justify-between mb-8 flex-wrap gap-4">
+      <h2 id="catalog-title" class="text-2xl font-semibold text-gray-900"></h2>
+      <div id="filter-buttons" class="flex gap-2 flex-wrap"></div>
+    </div>
+    <div id="products-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5"></div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="bg-[#f5f7fa]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 md:py-20">
+      <h2 id="about-title" class="text-2xl font-semibold text-gray-900 mb-10 text-center"></h2>
+      <div id="features-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contacts" class="border-t border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <a href="#"><img id="footer-logo" alt="НеХалат" class="h-8" /></a>
+          <p id="footer-text" class="mt-3 text-sm text-gray-400 max-w-xs leading-relaxed"></p>
+        </div>
+        <div>
+          <h4 class="text-sm font-medium text-gray-900 mb-3">Контакты</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li id="footer-email"></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-sm font-medium text-gray-900 mb-3">Соцсети</h4>
+          <div class="flex gap-3">
+            <a id="instagram-link" href="#" class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 hover:bg-brand-600 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+            <a id="whatsapp-link" href="#" class="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 hover:bg-brand-600 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-gray-100 mt-8 pt-6 text-center text-xs text-gray-300 space-y-2">
+        <div>
+          <a href="privacy.html" class="hover:text-brand-600 transition-colors">Политика конфиденциальности</a>
+          <span class="mx-2">·</span>
+          <a href="privacy.html" class="hover:text-brand-600 transition-colors">Согласие на обработку данных</a>
+        </div>
+        <div id="footer-copyright"></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="content.js"></script>
+  <script>
+    const C = SITE_CONTENT;
+    const featureIcons = [
+      '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1652a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>',
+      '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1652a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg>',
+      '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1652a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>',
+    ];
+
+    document.getElementById('header-logo').src = C.logo;
+    document.getElementById('hero-logo').src = C.logo;
+    document.getElementById('footer-logo').src = C.logo;
+    document.getElementById('hero-subtitle').textContent = C.hero.subtitle;
+    document.getElementById('hero-btn').textContent = C.hero.buttonText;
+    document.getElementById('catalog-title').textContent = C.catalogTitle;
+    document.getElementById('about-title').textContent = C.aboutTitle;
+    document.getElementById('footer-text').textContent = C.footerText;
+    document.getElementById('footer-email').textContent = C.contactEmail;
+    document.getElementById('footer-copyright').textContent = C.copyright;
+    document.getElementById('instagram-link').href = C.instagramUrl;
+    document.getElementById('whatsapp-link').href = C.whatsappUrl;
+
+    document.getElementById('filter-buttons').innerHTML = `
+      <button onclick="filterProducts('all')" data-filter="all" class="filter-btn px-4 py-2 text-sm rounded-lg transition-all bg-brand-600 text-white">${C.filterAll}</button>
+      <button onclick="filterProducts('tshirt')" data-filter="tshirt" class="filter-btn px-4 py-2 text-sm rounded-lg transition-all bg-gray-100 text-gray-600 hover:bg-gray-200">${C.filterTshirts}</button>
+      <button onclick="filterProducts('hoodie')" data-filter="hoodie" class="filter-btn px-4 py-2 text-sm rounded-lg transition-all bg-gray-100 text-gray-600 hover:bg-gray-200">${C.filterHoodies}</button>
+    `;
+
+    document.getElementById('features-grid').innerHTML = C.features.map((f, i) => `
+      <div class="text-center">
+        <div class="w-12 h-12 mx-auto mb-4 bg-white rounded-xl flex items-center justify-center shadow-sm">${featureIcons[i] || featureIcons[0]}</div>
+        <h3 class="font-medium text-gray-900 mb-2">${f.title}</h3>
+        <p class="text-sm text-gray-400 leading-relaxed">${f.text}</p>
+      </div>
+    `).join('');
+
+    function createProductCard(p) {
+      const badgeHtml = p.badge
+        ? `<span class="absolute top-3 left-3 z-10 px-2.5 py-1 text-[11px] font-medium tracking-wide rounded ${
+            p.badge === 'NEW' ? 'bg-brand-600 text-white' :
+            p.badge === 'SALE' ? 'bg-red-500 text-white' :
+            'bg-gray-900 text-white'
+          }">${p.badge}</span>` : '';
+      const oldPriceHtml = p.oldPrice
+        ? `<span class="text-xs text-gray-300 line-through">${p.oldPrice.toLocaleString('ru-RU')} ₽</span>` : '';
+      const colorsHtml = p.colors.map(c =>
+        `<span class="w-3.5 h-3.5 rounded-full border border-gray-200 inline-block" style="background-color:${c}"></span>`
+      ).join('');
+      const imgSrc = p.image || 'https://placehold.co/400x530/f0f0f0/999?text=' + encodeURIComponent(p.name.replace(/[«»]/g, '')) + '&font=roboto';
+      return `
+        <div class="group" data-type="${p.type}">
+          <div class="relative aspect-[3/4] overflow-hidden rounded-lg bg-gray-100 mb-3">
+            ${badgeHtml}
+            <img src="${imgSrc}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500" loading="lazy" />
+          </div>
+          <div>
+            <h3 class="text-sm text-gray-700 mb-1.5 leading-snug">${p.name}</h3>
+            <div class="flex items-center gap-1.5 mb-2">${colorsHtml}</div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-900">${p.price.toLocaleString('ru-RU')} ₽</span>
+              ${oldPriceHtml}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function renderProducts(filter) {
+      const grid = document.getElementById('products-grid');
+      const filtered = filter === 'all' ? C.products : C.products.filter(p => p.type === filter);
+      grid.innerHTML = filtered.map(createProductCard).join('');
+    }
+
+    function filterProducts(category) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        const isActive = btn.dataset.filter === category;
+        btn.className = 'filter-btn px-4 py-2 text-sm rounded-lg transition-all '
+          + (isActive ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200');
+      });
+      renderProducts(category);
+    }
+
+    renderProducts('all');
+  </script>
+
+</body>
+</html>
