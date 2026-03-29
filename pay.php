@@ -76,13 +76,15 @@ if ($email || $phone) {
 }
 
 /* === ГЕНЕРАЦИЯ ТОКЕНА === */
-$tokenParams = [
-    'TerminalKey' => $params['TerminalKey'],
-    'Amount'      => (string)$params['Amount'],
-    'OrderId'     => $params['OrderId'],
-    'Description' => $params['Description'],
-    'Password'    => $PASSWORD,
-];
+/* Берём все скалярные параметры (без Token, Receipt, DATA, Shops, Items) + Password */
+$tokenParams = [];
+$excludeKeys = ['Token', 'Receipt', 'DATA', 'Shops', 'Items'];
+foreach ($params as $k => $v) {
+    if (in_array($k, $excludeKeys)) continue;
+    if (is_array($v) || is_object($v)) continue;
+    $tokenParams[$k] = (string)$v;
+}
+$tokenParams['Password'] = $PASSWORD;
 ksort($tokenParams);
 $tokenStr = implode('', array_values($tokenParams));
 $params['Token'] = hash('sha256', $tokenStr);
