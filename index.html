@@ -287,7 +287,160 @@
     document.getElementById('footer-catalog').innerHTML = C.navLinks.map(l =>
       `<li><a href="#" onclick="filterProducts('${l.filter}');window.scrollTo(0,0);return false" class="hover:text-white transition-colors">${l.label}</a></li>`
     ).join('');
+    /* --- Buy button handler --- */
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('.buy-btn');
+      if (!btn) return;
+      const name = btn.dataset.product;
+      const price = btn.dataset.price;
+      const product = C.products.find(p => p.name === name);
+      openBuyModal(product || {name, price: +price, colors:[], sizes:''});
+    });
+
+    function openBuyModal(p) {
+      const m = document.getElementById('buy-modal');
+      document.getElementById('bm-name').textContent = p.name;
+      document.getElementById('bm-price').textContent = p.price.toLocaleString('ru-RU') + ' ₽';
+
+      /* Sizes */
+      const sizesStr = p.sizes || 'XS — XXL';
+      const sizesList = sizesStr.split(/\s*[—–-]\s*/).length > 1
+        ? expandSizes(sizesStr) : [sizesStr];
+      document.getElementById('bm-sizes').innerHTML = sizesList.map((s,i) =>
+        `<button type="button" onclick="pickSize(this)" class="size-opt px-3 py-1.5 text-xs border rounded ${i===0?'border-brand-600 text-brand-600 bg-brand-50':'border-gray-200 text-gray-600 hover:border-gray-400'}" data-size="${s}">${s}</button>`
+      ).join('');
+
+      /* Colors */
+      document.getElementById('bm-colors').innerHTML = p.colors.map((c,i) =>
+        `<button type="button" onclick="pickColor(this)" class="clr-opt w-8 h-8 rounded-full border-2 ${i===0?'border-brand-600 ring-2 ring-brand-200':'border-gray-200 hover:border-gray-400'}" style="background:${c}" data-color="${c}"></button>`
+      ).join('');
+
+      document.getElementById('bm-product').value = p.name;
+      document.getElementById('bm-amount').value = p.price;
+      document.getElementById('bm-sel-size').value = sizesList[0] || '';
+      document.getElementById('bm-sel-color').value = p.colors[0] || '';
+      document.getElementById('bm-error').classList.add('hidden');
+      document.getElementById('bm-submit').disabled = false;
+      document.getElementById('bm-submit').textContent = 'Оплатить ' + p.price.toLocaleString('ru-RU') + ' ₽';
+      m.classList.remove('hidden');
+    }
+
+    function closeBuyModal() { document.getElementById('buy-modal').classList.add('hidden'); }
+
+    function pickSize(el) {
+      document.querySelectorAll('.size-opt').forEach(b => b.className = 'size-opt px-3 py-1.5 text-xs border rounded border-gray-200 text-gray-600 hover:border-gray-400');
+      el.className = 'size-opt px-3 py-1.5 text-xs border rounded border-brand-600 text-brand-600 bg-brand-50';
+      document.getElementById('bm-sel-size').value = el.dataset.size;
+    }
+    function pickColor(el) {
+      document.querySelectorAll('.clr-opt').forEach(b => { b.className = 'clr-opt w-8 h-8 rounded-full border-2 border-gray-200 hover:border-gray-400'; b.style.boxShadow=''; });
+      el.className = 'clr-opt w-8 h-8 rounded-full border-2 border-brand-600';
+      el.style.boxShadow = '0 0 0 3px rgba(22,82,160,.2)';
+      document.getElementById('bm-sel-color').value = el.dataset.color;
+    }
+
+    function expandSizes(str) {
+      const all = ['XS','S','M','L','XL','XXL','3XL'];
+      const parts = str.split(/\s*[—–-]\s*/);
+      const start = all.indexOf(parts[0].trim().toUpperCase());
+      const end = all.indexOf(parts[parts.length-1].trim().toUpperCase());
+      if (start === -1 || end === -1) return [str];
+      return all.slice(start, end + 1);
+    }
+
+    async function submitBuy(e) {
+      e.preventDefault();
+      const btn = document.getElementById('bm-submit');
+      const errEl = document.getElementById('bm-error');
+      errEl.classList.add('hidden');
+      btn.disabled = true;
+      btn.textContent = 'Переход к оплате...';
+
+      const body = {
+        product: document.getElementById('bm-product').value,
+        amount:  parseInt(document.getElementById('bm-amount').value),
+        email:   document.getElementById('bm-email').value.trim(),
+        phone:   document.getElementById('bm-phone').value.trim(),
+        size:    document.getElementById('bm-sel-size').value,
+        color:   document.getElementById('bm-sel-color').value,
+      };
+
+      if (!body.email && !body.phone) {
+        errEl.textContent = 'Укажите email или телефон';
+        errEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Оплатить ' + body.amount.toLocaleString('ru-RU') + ' ₽';
+        return;
+      }
+
+      try {
+        const resp = await fetch('pay.php', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+        const data = await resp.json();
+        if (data.success && data.paymentUrl) {
+          window.location.href = data.paymentUrl;
+        } else {
+          errEl.textContent = data.error || 'Ошибка при создании платежа';
+          errEl.classList.remove('hidden');
+          btn.disabled = false;
+          btn.textContent = 'Оплатить ' + body.amount.toLocaleString('ru-RU') + ' ₽';
+        }
+      } catch(err) {
+        errEl.textContent = 'Ошибка соединения. Попробуйте ещё раз.';
+        errEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Оплатить ' + body.amount.toLocaleString('ru-RU') + ' ₽';
+      }
+    }
   </script>
+
+  <!-- Buy Modal -->
+  <div id="buy-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" onclick="if(event.target===this)closeBuyModal()">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+      <div class="flex items-center justify-between px-6 pt-5 pb-3">
+        <h3 class="text-lg font-semibold text-gray-900" id="bm-name"></h3>
+        <button onclick="closeBuyModal()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+      </div>
+      <form onsubmit="submitBuy(event)" class="px-6 pb-6 space-y-4">
+        <input type="hidden" id="bm-product"/>
+        <input type="hidden" id="bm-amount"/>
+        <input type="hidden" id="bm-sel-size"/>
+        <input type="hidden" id="bm-sel-color"/>
+
+        <div class="text-xl font-bold text-brand-600" id="bm-price"></div>
+
+        <div>
+          <label class="block text-xs text-gray-400 mb-2">Размер</label>
+          <div id="bm-sizes" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-gray-400 mb-2">Цвет</label>
+          <div id="bm-colors" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">Email</label>
+          <input type="email" id="bm-email" placeholder="your@email.com" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-brand-600 focus:ring-1 focus:ring-brand-200 outline-none"/>
+        </div>
+
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">Телефон</label>
+          <input type="tel" id="bm-phone" placeholder="+7 (___) ___-__-__" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-brand-600 focus:ring-1 focus:ring-brand-200 outline-none"/>
+        </div>
+
+        <div id="bm-error" class="hidden text-sm text-red-500 bg-red-50 px-3 py-2 rounded-lg"></div>
+
+        <button type="submit" id="bm-submit" class="w-full py-3 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition-colors disabled:opacity-50">
+          Оплатить
+        </button>
+
+        <div class="flex items-center justify-center gap-2 text-[10px] text-gray-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Безопасная оплата через Т-Банк
+        </div>
+      </form>
+    </div>
+  </div>
 
 </body>
 </html>

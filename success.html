@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Оплата прошла — НеХалат</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="font-[Inter] bg-gray-50 min-h-screen flex items-center justify-center">
+  <div class="text-center px-6 max-w-md">
+    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    </div>
+    <h1 class="text-2xl font-bold text-gray-900 mb-3">Оплата прошла успешно!</h1>
+    <p class="text-gray-500 mb-2">Спасибо за заказ. Мы уже начали его обрабатывать.</p>
+    <p class="text-sm text-gray-400 mb-6" id="order-info"></p>
+    <p class="text-sm text-gray-500 mb-6">Подтверждение придёт на вашу почту. Если есть вопросы — пишите на <a href="mailto:nehalat@yandex.ru" class="text-blue-600 hover:underline">nehalat@yandex.ru</a></p>
+    <a href="/" class="inline-block px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">Вернуться в каталог</a>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const order = params.get('order');
+    if (order) document.getElementById('order-info').textContent = 'Номер заказа: ' + order;
+  </script>
+</body>
+</html>
