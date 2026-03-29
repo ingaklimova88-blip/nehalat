@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Генератор мокапов — НеХалат</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    .tshirt-container { position:relative; width:400px; height:530px; }
+    .tshirt-svg { position:absolute; inset:0; width:100%; height:100%; }
+    .print-area { position:absolute; top:28%; left:22%; width:56%; height:36%; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .print-area img { max-width:100%; max-height:100%; object-fit:contain; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen">
+  <header class="bg-white border-b border-gray-200 py-3 px-6">
+    <h1 class="text-lg font-semibold text-gray-800">🎽 Генератор мокапов футболок — НеХалат</h1>
+    <p class="text-xs text-gray-400 mt-1">Загрузи принт → выбери цвет футболки → скачай готовую картинку для сайта</p>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+
+    <!-- Controls -->
+    <div class="bg-white rounded-xl p-6 shadow-sm mb-8">
+      <div class="flex flex-wrap items-end gap-6">
+        <div>
+          <label class="block text-xs text-gray-400 mb-2">Загрузи принт (PNG/JPG)</label>
+          <input type="file" id="print-upload" accept="image/*" class="text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-2">Цвет футболки</label>
+          <div class="flex gap-2">
+            <button onclick="setColor('#ffffff','#222')" class="w-8 h-8 rounded-full bg-white border-2 border-gray-300 hover:scale-110 transition-transform" title="Белая"></button>
+            <button onclick="setColor('#1a1a1a','#fff')" class="w-8 h-8 rounded-full bg-gray-900 border-2 border-gray-600 hover:scale-110 transition-transform" title="Чёрная"></button>
+            <button onclick="setColor('#c8d8c4','#222')" class="w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-transform" style="background:#c8d8c4" title="Оливковая"></button>
+            <button onclick="setColor('#1652a0','#fff')" class="w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-transform" style="background:#1652a0" title="Синяя"></button>
+            <button onclick="setColor('#e8ddd3','#222')" class="w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-transform" style="background:#e8ddd3" title="Бежевая"></button>
+            <button onclick="setColor('#f0a890','#222')" class="w-8 h-8 rounded-full border-2 border-gray-300 hover:scale-110 transition-transform" style="background:#f0a890" title="Персиковая"></button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-2">Размер принта</label>
+          <input type="range" id="print-scale" min="40" max="100" value="75" class="w-40" oninput="updateScale()"/>
+        </div>
+        <button onclick="downloadMockup()" class="px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+          ⬇ Скачать PNG
+        </button>
+      </div>
+    </div>
+
+    <!-- Mockup Preview -->
+    <div class="flex justify-center">
+      <div id="mockup-box" class="tshirt-container bg-gray-50 rounded-xl overflow-hidden shadow-lg">
+        <!-- T-shirt SVG -->
+        <svg class="tshirt-svg" viewBox="0 0 400 530" xmlns="http://www.w3.org/2000/svg">
+          <path id="tshirt-path" d="
+            M 118 48
+            C 110 46, 90 42, 72 55
+            L 8 105
+            C 4 108, 2 114, 5 118
+            L 42 175
+            C 45 180, 52 181, 56 178
+            L 82 158
+            L 82 480
+            C 82 490, 90 498, 100 498
+            L 300 498
+            C 310 498, 318 490, 318 480
+            L 318 158
+            L 344 178
+            C 348 181, 355 180, 358 175
+            L 395 118
+            C 398 114, 396 108, 392 105
+            L 328 55
+            C 310 42, 290 46, 282 48
+            C 270 52, 246 62, 200 62
+            C 154 62, 130 52, 118 48
+            Z
+          " fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
+          <!-- Collar -->
+          <ellipse cx="200" cy="56" rx="48" ry="16" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
+        </svg>
+        <!-- Print area -->
+        <div class="print-area" id="print-area">
+          <div id="no-print" class="text-center text-gray-300 text-sm">
+            <p>← Загрузи принт</p>
+          </div>
+          <img id="print-img" src="" alt="" class="hidden"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- Batch section -->
+    <div class="mt-10 bg-white rounded-xl p-6 shadow-sm">
+      <h2 class="text-base font-semibold mb-4">Пакетная генерация (все цвета сразу)</h2>
+      <p class="text-sm text-gray-500 mb-4">Загрузи принт выше, затем нажми кнопку — скачается 6 мокапов в разных цветах.</p>
+      <button onclick="batchDownload()" class="px-5 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">
+        ⬇ Скачать все 6 цветов
+      </button>
+    </div>
+
+  </main>
+
+  <script>
+    let currentColor = '#ffffff';
+    let currentStroke = '#e0e0e0';
+
+    document.getElementById('print-upload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const img = document.getElementById('print-img');
+        img.src = ev.target.result;
+        img.classList.remove('hidden');
+        document.getElementById('no-print').classList.add('hidden');
+        updateScale();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function setColor(fill, textColor) {
+      currentColor = fill;
+      const path = document.getElementById('tshirt-path');
+      path.setAttribute('fill', fill);
+      const strokeC = fill === '#1a1a1a' ? '#444' : '#e0e0e0';
+      path.setAttribute('stroke', strokeC);
+      document.querySelector('ellipse').setAttribute('stroke', strokeC);
+    }
+
+    function updateScale() {
+      const val = document.getElementById('print-scale').value;
+      const img = document.getElementById('print-img');
+      img.style.maxWidth = val + '%';
+      img.style.maxHeight = val + '%';
+    }
+
+    async function downloadMockup() {
+      const box = document.getElementById('mockup-box');
+      const canvas = await html2canvas(box, {
+        backgroundColor: null,
+        scale: 2,
+        useCORS: true,
+        width: 400,
+        height: 530
+      });
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = 'mockup-' + currentColor.replace('#','') + '.png';
+      a.click();
+    }
+
+    const batchColors = [
+      {fill:'#ffffff', stroke:'#e0e0e0'},
+      {fill:'#1a1a1a', stroke:'#444'},
+      {fill:'#c8d8c4', stroke:'#e0e0e0'},
+      {fill:'#1652a0', stroke:'#e0e0e0'},
+      {fill:'#e8ddd3', stroke:'#e0e0e0'},
+      {fill:'#f0a890', stroke:'#e0e0e0'},
+    ];
+
+    async function batchDownload() {
+      const img = document.getElementById('print-img');
+      if (!img.src || img.classList.contains('hidden')) {
+        alert('Сначала загрузи принт!');
+        return;
+      }
+      for (const c of batchColors) {
+        setColor(c.fill, '');
+        await new Promise(r => setTimeout(r, 300));
+        await downloadMockup();
+        await new Promise(r => setTimeout(r, 500));
+      }
+      alert('Все 6 мокапов скачаны!');
+    }
+  </script>
+</body>
+</html>

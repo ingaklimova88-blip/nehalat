@@ -149,8 +149,12 @@
     </div>
   </footer>
 
-  <script src="content.js"></script>
+  <script src="content.js?v=20260329"></script>
   <script>
+    if (typeof SITE_CONTENT === 'undefined') {
+      document.body.innerHTML = '<div style="text-align:center;padding:80px 20px;font-family:sans-serif"><h2>Ошибка загрузки контента</h2><p>Файл content.js не загрузился. Проверьте, что он лежит рядом с index.html на хостинге.</p></div>';
+      throw new Error('SITE_CONTENT not defined');
+    }
     const C = SITE_CONTENT;
 
     /* --- Banner --- */
